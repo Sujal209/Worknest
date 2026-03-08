@@ -1,12 +1,17 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// Serve static files
+app.use(express.static(path.join(__dirname)));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
@@ -14,9 +19,9 @@ app.use('/api/opportunities', require('./routes/opportunities'));
 app.use('/api/applications', require('./routes/applications'));
 app.use('/api/messages', require('./routes/messages'));
 
-// Default Route
+// Serve index.html for all other requests (SPA fallback)
 app.get('/', (req, res) => {
-    res.send('WorkNest API is running (JSON DB Mode)...');
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 const PORT = process.env.PORT || 5000;
