@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WorkNest | Empowering young minds</title>
+    <!-- Modern professional font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=3">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <!-- Splash Screen -->
+    <div id="splashScreen" class="splash-view">
+        <div class="splash-content">
+            <img src="splash_illustration.png" alt="WorkNest Office Illustration" class="splash-image">
+            <h1 class="splash-title">WorkNest</h1>
+            <p class="splash-subtitle">Empowering young minds</p>
+            <div class="splash-loader"></div>
+        </div>
+    </div>
+
+    <!-- Auth Screen -->
+    <div id="authScreen" class="auth-view" style="display:none;">
+        <div class="auth-container">
+            <!-- Left Side: Illustration -->
+            <div class="auth-illustration">
+                <img src="auth_illustration.png" alt="WorkNest Office Theme">
+            </div>
+
+            <!-- Right Side: Interaction -->
+            <div class="auth-form-side" style="position: relative;">
+                <button class="btn btn-text close-auth-btn" onclick="closeAuthScreen()"
+                    style="position: absolute; top: 15px; right: 20px; font-size: 1.5rem; color: var(--text-secondary); padding: 5px; z-index: 10;"><i
+                        class="fas fa-times"></i></button>
+                <h2
+                    style="font-size: 2.2rem; margin-bottom: 5px; color: var(--text-primary); font-weight: 700; margin-top: 20px;">
+                    Welcome
+                    to WorkNest</h2>
+                <p style="color: var(--text-secondary); margin-bottom: 30px; font-size: 1.1rem;">Please select your role
+                    to continue</p>
+
+                <div id="roleSelection">
+                    <button class="btn btn-outline w-100 mb-3 role-btn" onclick="showAuthForm('student')">
+                        <i class="fas fa-user-graduate role-icon"></i>
+                        <span>I am a Job Seeker</span>
+                    </button>
+                    <button class="btn btn-outline w-100 role-btn" onclick="showAuthForm('recruiter')">
+                        <i class="fas fa-building role-icon"></i>
+                        <span>I am a Recruiter</span>
+                    </button>
+                </div>
+
+                <div id="loginFormContainer" style="display:none; text-align: left;">
+                    <h3 id="authRoleTitle" style="margin-bottom: 20px; font-size: 1.5rem; text-align: center;">Log In
+                    </h3>
+                    <form id="mainAuthForm" class="auth-form active-form"
+                        onsubmit="event.preventDefault(); handleMainAuth();">
+                        <input type="hidden" id="authRole" value="student">
+                        <input type="hidden" id="authMode" value="login">
+
+                        <div class="form-group" id="nameGroup" style="display:none;">
+                            <label for="main-name">Full Name / Organization</label>
+                            <input type="text" id="main-name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="main-email">Email</label>
+                            <input type="email" id="main-email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="main-password">Password</label>
+                            <input type="password" id="main-password" required>
+                        </div>
+                        <button type="submit" class="btn btn-filled w-100 btn-lg mt-2" id="mainAuthBtn">Log In</button>
+                    </form>
+                    <div style="text-align:center; margin-top:20px;">
+                        <p style="cursor:pointer; color:var(--accent-color); font-weight: 600;"
+                            onclick="toggleMainAuthMode()" id="mainAuthToggleText">Need an account? Sign up</p>
+                        <button class="btn btn-text mt-2" onclick="resetAuthSelection()"
+                            style="color: var(--text-secondary); font-size: 0.9rem;"><i class="fas fa-arrow-left"></i>
+                            Back to roles</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- App Container -->
+    <div id="appContainer" style="display: none;">
+        <!-- Navbar -->
+        <nav class="navbar" id="navbar">
+            <div class="nav-container">
+                <a href="#home" class="logo">WorkNest</a>
+                <div class="nav-links">
+                    <a href="#home" class="nav-item active">Home</a>
+                    <a href="#about" class="nav-item">About</a>
+                    <a href="#features" class="nav-item">Features</a>
+                    <a href="#opportunities" class="nav-item">Opportunities</a>
+                </div>
+                <div class="nav-actions">
+                    <a href="#" class="nav-login" onclick="openModal()">Log In</a>
+                    <button class="btn btn-filled" onclick="openModal()">Get Started</button>
+                </div>
+                <div class="hamburger">
+                    <i class="fas fa-bars"></i>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Mobile Menu -->
+        <div class="mobile-menu">
+            <div class="close-btn"><i class="fas fa-times"></i></div>
+            <a href="#home" class="mobile-link">Home</a>
+            <a href="#about" class="mobile-link">About</a>
+            <a href="#features" class="mobile-link">Features</a>
+            <a href="#opportunities" class="mobile-link">Opportunities</a>
+            <div class="mobile-actions">
+                <button class="btn btn-outline mobile-login w-100" onclick="openModal()">Log In</button>
+                <button class="btn btn-filled mobile-signup w-100 mt-3" onclick="openModal()">Get Started</button>
+            </div>
+        </div>
+
+        <!-- Hero Section -->
+        <section id="home" class="hero">
+            <div class="hero-shapes">
+                <div class="shape shape-1"></div>
+                <div class="shape shape-2"></div>
+            </div>
+            <div class="hero-content reveal">
+                <div class="hero-badge">The Premier Talent Network</div>
+                <h1 class="hero-title" style="font-size: 5.5rem; letter-spacing: -2px; margin-bottom: 10px;">Welcome to
+                    <span>WorkNest</span>
+                </h1>
+                <h2 style="font-size: 2rem; font-weight: 400; color: var(--text-secondary); margin-bottom: 30px;">
+                    Elevating
+                    the Next Generation of Professional Talent</h2>
+                <p class="hero-subtitle">WorkNest is the centralized professional platform bridging the gap between
+                    exceptional emerging talent and industry-leading organizations through internships, high-impact
+                    volunteering, and specialized projects.</p>
+                <div class="hero-buttons">
+                    <a href="#opportunities" class="btn btn-filled btn-lg">Explore Postings</a>
+                    <a href="#about" class="btn btn-outline btn-lg">Learn More</a>
+                </div>
+            </div>
+
+            <!-- Premium UI Element - Dashboard Mockup Hint -->
+            <div class="hero-dashboard-preview reveal">
+                <div class="dashboard-glass">
+                    <div class="dash-header">
+                        <span class="dot dot-red"></span>
+                        <span class="dot dot-yellow"></span>
+                        <span class="dot dot-green"></span>
+                    </div>
+                    <div class="dash-body">
+                        <div class="dash-stat">
+                            <i class="fas fa-chart-line"></i>
+                            <div>
+                                <h4>Top Match</h4>
+                                <p>Product Design Intern</p>
+                            </div>
+                        </div>
+                        <div class="dash-stat">
+                            <i class="fas fa-hand-holding-heart"></i>
+                            <div>
+                                <h4>Volunteer</h4>
+                                <p>Community Outreach</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats Section -->
+        <section class="stats">
+            <div class="stats-container reveal">
+                <div class="stat-item">
+                    <h3 class="counter" data-target="10000">0</h3>
+                    <p>Active Users</p>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <h3 class="counter" data-target="500">0</h3>
+                    <p>Verified Partners</p>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat-item">
+                    <h3 class="counter-percent" data-target="85">0</h3>
+                    <p>Success Match Rate</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About WorkNest Section -->
+        <section id="about" class="about">
+            <div class="about-container">
+                <div class="about-image reveal">
+                    <div class="image-placeholder">
+                        <div class="abstract-blobs"></div>
+                        <i class="fas fa-leaf about-icon-lg"></i>
+                    </div>
+                </div>
+                <div class="about-content reveal">
+                    <h4 class="section-badge">Our Mission</h4>
+                    <h2>Bridging the gap between raw talent and real-world impact.</h2>
+                    <p class="about-text">We believe experience shouldn't require a 5-page resume. WorkNest was built to
+                        create a frictionless ecosystem where students and freshers can seamlessly transition into the
+                        professional world.</p>
+                    <ul class="about-list">
+                        <li><i class="fas fa-check-circle"></i> Focus on demonstrable skills, not just degrees.</li>
+                        <li><i class="fas fa-check-circle"></i> Verified organizations supporting youth growth.</li>
+                        <li><i class="fas fa-check-circle"></i> A transparent, unified platform for diverse roles.</li>
+                    </ul>
+                    <a href="#contact" class="link-arrow">Partner with us <i class="fas fa-arrow-right"></i></a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section / How it Works merged for premium feel -->
+        <section id="features" class="features">
+            <div class="section-header reveal">
+                <h4 class="section-badge">The Platform</h4>
+                <h2>Engineered for your growth</h2>
+                <p>A streamlined experience designed specifically for Gen Z professionals.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-id-badge"></i></div>
+                    <h3>Dynamic Profiles</h3>
+                    <p>Say goodbye to static resumes. Build a living portfolio that highlights your projects, skills,
+                        and
+                        actual contributions securely.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-bolt"></i></div>
+                    <h3>1-Click Apply</h3>
+                    <p>We've eliminated redundant forms. Apply to multiple roles instantly using your WorkNest profile
+                        and
+                        track progress in real-time.</p>
+                </div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon"><i class="fas fa-bullseye"></i></div>
+                    <h3>Smart Matching</h3>
+                    <p>Our algorithm surfaces opportunities that perfectly align with your current tech stack, soft
+                        skills,
+                        and career trajectory.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Opportunities Listing Page (Demo) -->
+        <section id="opportunities" class="opportunities">
+            <div class="section-header reveal">
+                <h4 class="section-badge">Live Board</h4>
+                <h2>Discover your next move</h2>
+                <p>Curated roles from top startups, NGOs, and creative agencies.</p>
+            </div>
+
+            <div class="filter-container reveal">
+                <button class="filter-btn active" data-filter="all">All Roles</button>
+                <button class="filter-btn" data-filter="internship">Internships</button>
+                <button class="filter-btn" data-filter="volunteer">Volunteering</button>
+                <button class="filter-btn" data-filter="rent">Rent-Based Tasks</button>
+            </div>
+
+            <div class="opportunities-grid">
+                <!-- Internship -->
+                <div class="opp-card reveal" data-category="internship">
+                    <div class="opp-card-header">
+                        <div class="org-logo bg-light-purple"><i class="fas fa-cube"></i></div>
+                        <div class="opp-badge badge-internship">Internship</div>
+                    </div>
+                    <div class="opp-card-body">
+                        <h3>Frontend Developer Intern</h3>
+                        <p class="org-name">TechNova Solutions</p>
+                        <div class="opp-tags">
+                            <span class="opp-tag"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                            <span class="opp-tag"><i class="far fa-clock"></i> 3 Months</span>
+                            <span class="opp-tag"><i class="fas fa-wallet"></i> Paid</span>
+                        </div>
+                    </div>
+                    <div class="opp-card-footer">
+                        <button class="btn btn-outline btn-full">Apply Now</button>
+                    </div>
+                </div>
+
+                <!-- Volunteer -->
+                <div class="opp-card reveal" data-category="volunteer">
+                    <div class="opp-card-header">
+                        <div class="org-logo bg-light-orange"><i class="fas fa-hands-helping"></i></div>
+                        <div class="opp-badge badge-volunteer">Volunteer</div>
+                    </div>
+                    <div class="opp-card-body">
+                        <h3>Community Outreach Manager</h3>
+                        <p class="org-name">EduCare Foundation</p>
+                        <div class="opp-tags">
+                            <span class="opp-tag"><i class="fas fa-map-marker-alt"></i> Mumbai</span>
+                            <span class="opp-tag"><i class="far fa-calendar-alt"></i> Weekends</span>
+                        </div>
+                    </div>
+                    <div class="opp-card-footer">
+                        <button class="btn btn-outline btn-full">Apply Now</button>
+                    </div>
+                </div>
+
+                <!-- Rent-Based -->
+                <div class="opp-card reveal" data-category="rent">
+                    <div class="opp-card-header">
+                        <div class="org-logo bg-light-blue"><i class="fas fa-paint-brush"></i></div>
+                        <div class="opp-badge badge-rent">Rent-Based</div>
+                    </div>
+                    <div class="opp-card-body">
+                        <h3>Freelance UI/UX Designer</h3>
+                        <p class="org-name">Creative Minds Studio</p>
+                        <div class="opp-tags">
+                            <span class="opp-tag"><i class="fas fa-map-marker-alt"></i> Remote</span>
+                            <span class="opp-tag"><i class="fas fa-tasks"></i> Project Basis</span>
+                        </div>
+                    </div>
+                    <div class="opp-card-footer">
+                        <button class="btn btn-outline btn-full">Apply Now</button>
+                    </div>
+                </div>
+            </div>
+            <div class="view-all-container reveal">
+                <a href="#" class="btn btn-filled">View All Opportunities</a>
+            </div>
+        </section>
+
+        <!-- Testimonials Section -->
+        <section class="testimonials">
+            <div class="section-header reveal">
+                <h4 class="section-badge">Success Stories</h4>
+                <h2>Trusted by the community</h2>
+                <p>Hear from students and organizations who use WorkNest.</p>
+            </div>
+            <div class="testimonials-grid">
+                <div class="testimonial-card reveal">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">"WorkNest completely changed how I look for roles. The 1-click apply and
+                        lack of resume stress let me focus on showing my actual coding projects."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar bg-avatar-1">S</div>
+                        <div class="author-info">
+                            <h4>Sarah J.</h4>
+                            <span>Frontend Engineer</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">"As a startup founder, finding young, driven talent was difficult.
+                        WorkNest
+                        provides perfectly matched candidates without the usual hiring noise."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar bg-avatar-2">M</div>
+                        <div class="author-info">
+                            <h4>Mark T.</h4>
+                            <span>CEO, TechNova</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="testimonial-card reveal">
+                    <div class="quote-icon"><i class="fas fa-quote-left"></i></div>
+                    <p class="testimonial-text">"The volunteering matching system is flawless. We found exactly the
+                        enthusiastic mentors we needed for our weekend education drive."</p>
+                    <div class="testimonial-author">
+                        <div class="author-avatar bg-avatar-3">P</div>
+                        <div class="author-info">
+                            <h4>Priya K.</h4>
+                            <span>Director, EduCare</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Premium Footer -->
+        <footer id="contact" class="footer">
+            <div class="footer-container">
+                <div class="footer-top">
+                    <div class="footer-brand">
+                        <h2>WorkNest 🐼</h2>
+                        <p>Empowering young minds to work, learn, and contribute seamlessly.</p>
+                    </div>
+
+                    <div class="footer-links-group">
+                        <div class="footer-col">
+                            <h3>Platform</h3>
+                            <a href="#opportunities">Job Board</a>
+                            <a href="#">For Talent</a>
+                            <a href="#">For Companies</a>
+                            <a href="#">For NGOs</a>
+                        </div>
+
+                        <div class="footer-col">
+                            <h3>Company</h3>
+                            <a href="#about">About Us</a>
+                            <a href="#">Careers</a>
+                            <a href="#">Press</a>
+                            <a href="#contact">Contact</a>
+                        </div>
+
+                        <div class="footer-col">
+                            <h3>Legal</h3>
+                            <a href="#">Privacy Policy</a>
+                            <a href="#">Terms of Service</a>
+                            <a href="#">Cookie Policy</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-bottom">
+                    <p>&copy; 2026 WorkNest Inc. All rights reserved.</p>
+                    <div class="social-icons">
+                        <a href="#" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+
+        <!-- Auth Modal (Refined) -->
+        <div class="modal-overlay" id="authModal">
+            <div class="modal-content">
+                <button class="close-modal" onclick="closeModal()"><i class="fas fa-times"></i></button>
+
+                <div class="modal-header">
+                    <h2>Welcome Back</h2>
+                    <p>Log in to access your WorkNest dashboard.</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab active" onclick="switchTab('login')">Log In</button>
+                    <button class="auth-tab" onclick="switchTab('register')">Sign Up</button>
+                </div>
+
+                <form id="loginForm" class="auth-form active-form" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <div class="password-header">
+                            <label for="login-password">Password</label>
+                            <a href="#" class="forgot-pwd">Forgot password?</a>
+                        </div>
+                        <input type="password" id="login-password" placeholder="Enter your password" required>
+                    </div>
+                    <button type="submit" class="btn btn-filled w-100 btn-lg">Log In</button>
+
+                    <div class="auth-divider"><span>or continue with</span></div>
+
+                    <button type="button" class="btn btn-outline w-100 btn-social">
+                        <i class="fab fa-google"></i> Google
+                    </button>
+                </form>
+
+                <form id="registerForm" class="auth-form" onsubmit="event.preventDefault();">
+                    <div class="form-group">
+                        <label for="reg-name">Full Name</label>
+                        <input type="text" id="reg-name" placeholder="John Doe" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" placeholder="name@example.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-role">Account Type</label>
+                        <div class="custom-select-wrapper">
+                            <select id="reg-role" required>
+                                <option value="" disabled selected>Select your objective</option>
+                                <option value="student">I am a Student / Fresher</option>
+                                <option value="recruiter">I am hiring Talent</option>
+                                <option value="ngo">I represent an NGO</option>
+                            </select>
+                            <i class="fas fa-chevron-down select-icon"></i>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password</label>
+                        <input type="password" id="reg-password" placeholder="Create a strong password" required>
+                    </div>
+                    <button type="submit" class="btn btn-filled w-100 btn-lg">Create Account</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- Recruiter Dashboard Modal -->
+        <div class="modal-overlay" id="recruiterModal">
+            <div class="modal-content" style="max-width: 800px;">
+                <button class="close-modal" onclick="closeRecruiterModal()"><i class="fas fa-times"></i></button>
+                <div class="modal-header">
+                    <h2>Recruiter Workspace</h2>
+                    <p>Manage applications, send messages, and post opportunities.</p>
+                </div>
+
+                <div
+                    style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--bg-secondary); padding-bottom: 10px;">
+                    <button class="btn btn-filled" id="btn-tab-applicants"
+                        onclick="switchRecruiterTab('applicants')">Applicants & Messages</button>
+                    <button class="btn btn-outline" id="btn-tab-postjob" onclick="switchRecruiterTab('postjob')">Post
+                        New Job</button>
+                    <button class="btn btn-outline" id="btn-tab-myposts" onclick="switchRecruiterTab('myposts')">My
+                        Postings</button>
+                </div>
+
+                <!-- Tab 1: Applicants and Messaging -->
+                <div id="tab-applicants" style="display: block;">
+                    <form id="messageTemplateForm" class="auth-form active-form" style="margin-bottom: 24px;">
+                        <div class="form-group">
+                            <label for="msg-title">New Template Title</label>
+                            <input type="text" id="msg-title" placeholder="e.g. Next Steps - Interview" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="msg-content">Message Content (Include Skills, Duration, Salary, etc if
+                                needed)</label>
+                            <textarea id="msg-content" rows="3" placeholder="Dear applicant, we would like to..."
+                                style="width: 100%; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px; margin-top: 8px;"
+                                required></textarea>
+                        </div>
+                        <div style="display: flex; gap: 10px; margin-top: 15px;">
+                            <button type="submit" class="btn btn-filled" style="flex:1;">Save Template</button>
+                            <button type="button" class="btn btn-outline" style="flex:1;"
+                                onclick="switchRecruiterTab('postjob')">Post New Job</button>
+                        </div>
+                    </form>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div>
+                            <h3>Saved Templates</h3>
+                            <div id="savedTemplatesList"
+                                style="margin-top: 12px; font-size: 0.9rem; color: var(--gray-500); max-height: 350px; overflow-y: auto;">
+                                <!-- Templates load here -->
+                            </div>
+                        </div>
+                        <div>
+                            <h3>Recent Applicants</h3>
+                            <div id="recruiterApplicantsList"
+                                style="margin-top: 12px; font-size: 0.9rem; color: var(--gray-500); max-height: 350px; overflow-y: auto;">
+                                <!-- Applicants load here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Post Job -->
+                <div id="tab-postjob" style="display: none;">
+                    <form id="postJobForm" class="auth-form active-form">
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                            <div class="form-group">
+                                <label for="job-title">Job Title</label>
+                                <input type="text" id="job-title" placeholder="e.g. Frontend Developer" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-org">Organization Name</label>
+                                <input type="text" id="job-org" placeholder="e.g. Tech Corp" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-cat">Category</label>
+                                <select id="job-cat"
+                                    style="width: 100%; padding: 12px; border-radius: 8px; border: 1px solid var(--gray-200); margin-top: 8px;"
+                                    required>
+                                    <option value="internship">Internship</option>
+                                    <option value="volunteer">Volunteer</option>
+                                    <option value="rent">Rent Work</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-loc">Location</label>
+                                <input type="text" id="job-loc" placeholder="e.g. Remote, NY" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-dur">Duration/Type</label>
+                                <input type="text" id="job-dur" placeholder="e.g. 3 Months, Project" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="job-comp">General Compensation</label>
+                                <input type="text" id="job-comp" placeholder="e.g. Paid, Task-Based" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group mt-3">
+                            <label for="job-skills">Skills Required</label>
+                            <input type="text" id="job-skills" placeholder="e.g. HTML, CSS, React">
+                        </div>
+                        <div class="form-group">
+                            <label for="job-salary">Expected Salary / Stipend</label>
+                            <input type="text" id="job-salary" placeholder="e.g. $1000/mo">
+                        </div>
+
+                        <button type="submit" class="btn btn-filled w-100 btn-lg mt-3">Post Opportunity</button>
+                        <button type="button" class="btn btn-outline w-100 btn-lg mt-3"
+                            onclick="switchRecruiterTab('applicants')">Back to Dashboard</button>
+                    </form>
+                </div>
+
+                <!-- Tab 3: My Postings -->
+                <div id="tab-myposts" style="display: none;">
+                    <h3 style="margin-bottom: 20px;">My Live Postings</h3>
+                    <div id="recruiterPostingsList"
+                        style="margin-top: 15px; font-size: 0.9rem; color: var(--gray-500); max-height: 450px; overflow-y: auto;">
+                        <!-- Recruiter's own posts load here -->
+                    </div>
+                </div>
+
+                <script>
+                    function switchRecruiterTab(tab) {
+                        if (tab === 'applicants') {
+                            document.getElementById('tab-applicants').style.display = 'block';
+                            document.getElementById('tab-postjob').style.display = 'none';
+                            document.getElementById('btn-tab-applicants').className = 'btn btn-filled';
+                            document.getElementById('btn-tab-postjob').className = 'btn btn-outline';
+                        } else if (tab === 'postjob') {
+                            document.getElementById('tab-applicants').style.display = 'none';
+                            document.getElementById('tab-postjob').style.display = 'block';
+                            document.getElementById('tab-myposts').style.display = 'none';
+                            document.getElementById('btn-tab-applicants').className = 'btn btn-outline';
+                            document.getElementById('btn-tab-postjob').className = 'btn btn-filled';
+                            document.getElementById('btn-tab-myposts').className = 'btn btn-outline';
+                        } else {
+                            document.getElementById('tab-applicants').style.display = 'none';
+                            document.getElementById('tab-postjob').style.display = 'none';
+                            document.getElementById('tab-myposts').style.display = 'block';
+                            document.getElementById('btn-tab-applicants').className = 'btn btn-outline';
+                            document.getElementById('btn-tab-postjob').className = 'btn btn-outline';
+                            document.getElementById('btn-tab-myposts').className = 'btn btn-filled';
+                            fetchMyPostings();
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+
+        <!-- Student Dashboard Modal -->
+        <div class="modal-overlay" id="studentModal">
+            <div class="modal-content" style="max-width: 800px;">
+                <button class="close-modal" onclick="closeStudentModal()"><i class="fas fa-times"></i></button>
+                <div class="modal-header">
+                    <h2>My Workspace</h2>
+                    <p>Track applications, read messages, and update your Dynamic CV.</p>
+                </div>
+
+                <div
+                    style="display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid var(--bg-secondary); padding-bottom: 10px;">
+                    <button class="btn btn-filled" id="btn-tab-student-apps"
+                        onclick="switchStudentTab('apps')">Applications
+                        & Messages</button>
+                    <button class="btn btn-outline" id="btn-tab-student-cv" onclick="switchStudentTab('cv')">My Dynamic
+                        CV</button>
+                </div>
+
+                <!-- Tab 1: Apps & Messages -->
+                <div id="tab-student-apps" style="display: block;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 20px;">
+                        <div>
+                            <h3>Applied Opportunities</h3>
+                            <div id="studentApplicationsList"
+                                style="margin-top: 12px; font-size: 0.9rem; color: var(--gray-500); max-height: 300px; overflow-y: auto;">
+                                <!-- Student applications load here -->
+                            </div>
+                        </div>
+                        <div>
+                            <h3>My Messages</h3>
+                            <div id="studentMessagesList"
+                                style="margin-top: 12px; font-size: 0.9rem; color: var(--gray-500); max-height: 300px; overflow-y: auto;">
+                                <!-- Student messages load here -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tab 2: Dynamic CV -->
+                <div id="tab-student-cv" style="display: none;">
+                    <form id="studentCVForm" class="auth-form active-form">
+                        <p style="font-size: 0.9rem; color: var(--gray-500); margin-bottom: 15px;">Recruiters will see
+                            these
+                            details when you 1-Click Apply.</p>
+                        <div class="form-group">
+                            <label for="cv-skills">Core Skills (comma separated)</label>
+                            <input type="text" id="cv-skills" placeholder="e.g. JavaScript, Python, Communication"
+                                required>
+                        </div>
+                        <div class="form-group">
+                            <label for="cv-bio">Brief Bio / Summary</label>
+                            <textarea id="cv-bio" rows="3" placeholder="I am a passionate student looking for..."
+                                style="width: 100%; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px; margin-top: 8px;"></textarea>
+                        </div>
+                        <div class="form-group mt-3">
+                            <label for="cv-exp">Experience & Activities</label>
+                            <textarea id="cv-exp" rows="3" placeholder="Hackathon winner, Volunteer at local NGO..."
+                                style="width: 100%; padding: 12px; border: 1px solid var(--gray-200); border-radius: 8px; margin-top: 8px;"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-filled w-100 btn-lg mt-3">Save My CV</button>
+                    </form>
+                </div>
+
+                <script>
+                    function switchStudentTab(tab) {
+                        if (tab === 'apps') {
+                            document.getElementById('tab-student-apps').style.display = 'block';
+                            document.getElementById('tab-student-cv').style.display = 'none';
+                            document.getElementById('btn-tab-student-apps').className = 'btn btn-filled';
+                            document.getElementById('btn-tab-student-cv').className = 'btn btn-outline';
+                        } else {
+                            document.getElementById('tab-student-apps').style.display = 'none';
+                            document.getElementById('tab-student-cv').style.display = 'block';
+                            document.getElementById('btn-tab-student-apps').className = 'btn btn-outline';
+                            document.getElementById('btn-tab-student-cv').className = 'btn btn-filled';
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </div> <!-- Close appContainer -->
+
+    <!-- Scripts -->
+    <script src="script.js?v=5"></script>
+</body>
+
+</html>
+```

@@ -1,0 +1,25 @@
+[
+  {
+    "name": "Shravani",
+    "email": "shravanidhuri2006@gmail.com",
+    "role": "student",
+    "password": "$2b$10$B4OwgsI7pJQBVCQBxv254ucUhE8p0C.I0l2y1wdSYfHiPpFYYxF9u",
+    "id": "1772906062058",
+    "_id": "1772906062058",
+    "createdAt": "2026-03-07T17:54:22.058Z",
+    "cv": {
+      "bio": "I am a passionate student doing btech in cse",
+      "skills": "html ,css, js , java ",
+      "experience": "3 x hackathon winner"
+    }
+  },
+  {
+    "name": "Shravani",
+    "email": "shrazzz06@gmail.com",
+    "role": "recruiter",
+    "password": "$2b$10$xvSurfcjEHixL4anQZg92eeshtfBuAAz6mL.S.4fTxPpBeqWvvmlK",
+    "id": "1772906208771",
+    "_id": "1772906208771",
+    "createdAt": "2026-03-07T17:56:48.771Z"
+  }
+]
