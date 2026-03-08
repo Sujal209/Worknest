@@ -1,29 +1,58 @@
 const fs = require('fs');
 const path = require('path');
 
+// In-memory store for Vercel (serverless environment)
+const inMemoryStore = {};
+
 class JsonDB {
     constructor(collectionName) {
-        this.dirPath = path.join(__dirname, '../data');
-        this.filePath = path.join(this.dirPath, `${collectionName}.json`);
-        this.ensureDir();
+        this.collectionName = collectionName;
+        this.sourcePath = path.join(__dirname, '../data', `${collectionName}.json`);
+        
+        // Use /tmp for writable storage on Vercel
+        const tmpDir = process.env.VERCEL ? '/tmp' : path.join(__dirname, '../data');
+        this.dirPath = tmpDir;
+        this.filePath = path.join(tmpDir, `${collectionName}.json`);
+        
+        // Initialize in-memory store from source data
+        if (!inMemoryStore[collectionName]) {
+            try {
+                const sourceData = fs.readFileSync(this.sourcePath, 'utf8');
+                inMemoryStore[collectionName] = JSON.parse(sourceData);
+            } catch {
+                inMemoryStore[collectionName] = [];
+            }
+        }
     }
 
     ensureDir() {
-        if (!fs.existsSync(this.dirPath)) {
+        // Only try to create dir if not in Vercel (local dev)
+        if (!process.env.VERCEL && !fs.existsSync(this.dirPath)) {
             fs.mkdirSync(this.dirPath, { recursive: true });
-        }
-        if (!fs.existsSync(this.filePath)) {
-            fs.writeFileSync(this.filePath, JSON.stringify([], null, 2));
         }
     }
 
     async read() {
-        const data = fs.readFileSync(this.filePath, 'utf8');
-        return JSON.parse(data);
+        // Always read from in-memory store first
+        return inMemoryStore[this.collectionName] || [];
     }
 
     async write(data) {
-        fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+        // Update in-memory store
+        inMemoryStore[this.collectionName] = data;
+        
+        // Try to write to /tmp on Vercel (optional - data won't persist between invocations)
+        if (process.env.VERCEL) {
+            try {
+                fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+            } catch (err) {
+                // Silent fail - data is still in memory
+                console.log(`Notice: Could not write to ${this.filePath}, data stored in memory only`);
+            }
+        } else {
+            // Local development - write to data directory
+            fs.writeFileSync(this.filePath, JSON.stringify(data, null, 2));
+        }
     }
 
     async find(query = {}) {
